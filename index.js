@@ -18,6 +18,11 @@ function displayResults(responseJson) {
   // if there are previous results, remove them
   console.log(responseJson);
   $('#results-list').empty();
+  // if there is no result
+  if (responseJson.data.length === 0){
+    $('#results-list').append(
+      `<li><h3>No results found</h3></li>`);
+  }
   // iterate through the items array
   for (let i = 0; i < responseJson.data.length; i++){
     
