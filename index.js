@@ -18,6 +18,11 @@ function displayResults(responseJson) {
   // if there are previous results, remove them
   console.log(responseJson);
   $('#results-list').empty();
+  // if there is no result
+  if (responseJson.data.length === 0){
+    $('#results-list').append(
+      `<li><h3>No results found</h3></li>`);
+  }
   // iterate through the items array
   for (let i = 0; i < responseJson.data.length; i++){
     
@@ -26,7 +31,7 @@ function displayResults(responseJson) {
       `<li><h3>${responseJson.data[i].fullName}</h3>
       <p>${responseJson.data[i].description}</p>
       <p><a href="${responseJson.data[i].url}">More information</a></p>
-      <p>Location: ${addressObject.line1}${addressObject.line2 ? `, ${addressObject.line2}` : ''}, ${addressObject.city}, ${addressObject.stateCode}  ${addressObject.postalCode}</p>
+      <p>Location: ${addressObject.line1}, ${addressObject.line2 ? `${addressObject.line2} ,` : ''}${addressObject.city}, ${addressObject.stateCode}  ${addressObject.postalCode}</p>
       <img src='${responseJson.data[i].images[0].url}' alt='${responseJson.data[i].fullName}'>
       </li>`
     )};
@@ -57,6 +62,8 @@ function getParks(searchTerm, maxResults=10) {
       // {"X-Api-Key": apiKey}
       )
   };
+  // clear error message
+  $('#js-error-message').text('');
   fetch(url)
     .then(response => {
       if (response.ok) {
