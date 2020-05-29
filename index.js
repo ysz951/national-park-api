@@ -31,7 +31,7 @@ function displayResults(responseJson) {
       `<li><h3>${responseJson.data[i].fullName}</h3>
       <p>${responseJson.data[i].description}</p>
       <p><a href="${responseJson.data[i].url}">More information</a></p>
-      <p>Location: ${addressObject.line1}${addressObject.line2 ? `, ${addressObject.line2}` : ''}, ${addressObject.city}, ${addressObject.stateCode}  ${addressObject.postalCode}</p>
+      <p>Location: ${addressObject.line1}, ${addressObject.line2 ? `${addressObject.line2} ,` : ''}${addressObject.city}, ${addressObject.stateCode}  ${addressObject.postalCode}</p>
       <img src='${responseJson.data[i].images[0].url}' alt='${responseJson.data[i].fullName}'>
       </li>`
     )};
@@ -62,6 +62,8 @@ function getParks(searchTerm, maxResults=10) {
       // {"X-Api-Key": apiKey}
       )
   };
+  // clear error message
+  $('#js-error-message').text('');
   fetch(url)
     .then(response => {
       if (response.ok) {
