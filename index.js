@@ -86,5 +86,4 @@ function watchForm() {
     getParks(searchTerm, maxResults);
   });
 }
-
 $(watchForm);
