@@ -31,7 +31,7 @@ function displayResults(responseJson) {
     $('#results-list').append(
       `<li><h3>${responseJson.data[i].fullName}</h3>
       <p>${responseJson.data[i].description}</p>
-      <p><a href="${responseJson.data[i].url}">More information</a></p>
+      <p><a href="${responseJson.data[i].url}" target="_blank">More information</a></p>
       <p>Location: ${addressObject.line1}, ${addressObject.line2 ? `${addressObject.line2} ,` : ''}${addressObject.city}, ${addressObject.stateCode}  ${addressObject.postalCode}</p>
       <img src='${responseJson.data[i].images[0].url}' alt='${responseJson.data[i].fullName}'>
       </li>`
@@ -43,18 +43,13 @@ function displayResults(responseJson) {
 function getParks(searchTerm, maxResults=10) {
   const params = {
     api_key: apiKey,
-    limit: maxResults
+    limit: maxResults,
+    stateCode: searchTerm
   };
 
   const queryString = formatQueryParams(params)
-  // using regular expression to split searchTerm
-  let regularString = getTokens(searchTerm);
-  // get the state code params
-  let stateCodeParams = [];
-  stateCodeParams = regularString.map(str => formatQueryParams({stateCode: str}));
   // build the complete url
-  const url = searchURL + '?' + queryString + '&' + stateCodeParams.join('&');
-
+  const url = searchURL + '?' + queryString;
   console.log(url);
 
   const options = {
@@ -81,7 +76,9 @@ function getParks(searchTerm, maxResults=10) {
 function watchForm() {
   $('form').submit(event => {
     event.preventDefault();
-    const searchTerm = $('#js-search-term').val();
+    // use regular expression to split searchTerm and set searchTerm to be uppercase
+    const searchTerm = $('#js-search-term').val().toUpperCase().split(/[ ,!.";:-]+/);
+    console.log(searchTerm)
     const maxResults = $('#js-max-results').val();
     getParks(searchTerm, maxResults);
   });
